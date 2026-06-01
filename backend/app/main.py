@@ -1,6 +1,7 @@
 from fastapi import FastAPI #framework หลัก
 from fastapi.middleware.cors import CORSMiddleware #ตัวกลางจัดการสิทธิ์การเข้าถึง
 from app.config import settings #config ที่เขียนไว้ใน config.py
+from app.api import auth, projects, tasks
 
 #ทดสอบว่ารันได้:uvicorn app.main:app --reload
 # http://localhost:8000/health
@@ -20,10 +21,13 @@ app.add_middleware(
     allow_headers=["*"], # อนุญาตทุก header
 )
 
-# endpoint แรก — ใช้เช็คว่า server ยังทำงานอยู่ไหม ########
+# Routers
+app.include_router(auth.router)
+app.include_router(projects.router)
+app.include_router(tasks.router)
 
+# endpoint แรก — ใช้เช็คว่า server ยังทำงานอยู่ไหม ########
 @app.get("/health")
 def health_check():
     return {"status": "ok", "app": settings.APP_NAME}
-
 #####################################################
