@@ -24,6 +24,13 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
+
+    initAuth() {
+      if (process.client) {
+        this.token = localStorage.getItem('token')
+      }
+    },
+
     async register(email: string, username: string, password: string) {
       const response = await fetch('http://localhost:8000/auth/register', {
         method: 'POST',
