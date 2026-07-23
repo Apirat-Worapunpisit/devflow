@@ -23,6 +23,8 @@ class TaskCreate(TaskBase):
 # ทุก field เป็น Optional หมด
 class TaskUpdate(TaskBase):
     title: Optional[str] = None
+    status: Optional[TaskStatus] = None
+    priority: Optional[TaskPriority] = None
     project_id: Optional[int] = None
 
 # ส่งกลับ client

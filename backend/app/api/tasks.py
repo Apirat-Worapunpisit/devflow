@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from app.schemas import TaskCreate, TaskUpdate, TaskResponse
 from app.models import Task, Project
 from app.database import get_db
@@ -13,14 +13,15 @@ router = APIRouter(prefix="/tasks", tags=["Tasks"])
 
 @router.get("", response_model=List[TaskResponse])
 def get_tasks(
-    project_id: int,
+    project_id: Optional[int] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return db.query(Task).filter(
-        Task.project_id == project_id,
-        Task.owner_id == current_user.id
-    ).all()
+    # ไม่ระบุ project_id -> คืน task ทั้งหมดของ user (ใช้กับหน้า Dashboard)
+    query = db.query(Task).filter(Task.owner_id == current_user.id)
+    if project_id is not None:
+        query = query.filter(Task.project_id == project_id)
+    return query.all()
 
 
 @router.post("", response_model=TaskResponse)
