@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False #error message แบบละเอียด
 
     # Database
-    DATABASE_URL: str = "postgresql://postgres:password@localhost:5432/devflow" #db ถาวร User:postgres Pass:password DB:devflow
+    DATABASE_URL: str = "postgresql://postgres.cvmjuzbqdjmxelsnvkpq:Poog_Lord_1630706560@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres" #db ถาวร User:postgres Pass:password DB:devflow
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379" #in-memory db ชั่วคราว
