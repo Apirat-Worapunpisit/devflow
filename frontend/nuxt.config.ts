@@ -2,14 +2,16 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: [
-    '@nuxt/ui',
-    '@pinia/nuxt' 
-  ],
+  modules: ['@nuxt/ui', '@pinia/nuxt'],
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000'
+    }
+  },
   vite: {
     server: {
       watch: {
-        usePolling: true,    // ← แก้ปัญหา hot reload บน Windows + Docker
+        usePolling: true,
         interval: 1000,
       }
     },
