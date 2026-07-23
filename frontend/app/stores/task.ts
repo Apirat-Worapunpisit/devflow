@@ -33,16 +33,15 @@ export const useTaskStore = defineStore('tasks', {
         ? `http://localhost:8000/tasks?project_id=${projectId}`
         : 'http://localhost:8000/tasks'
 
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${authStore.token}`,
-        },
-      })
-
-      if (!response.ok) throw new Error('Failed to fetch tasks')
-
-      this.tasks = await response.json()
-      this.loading = false
+      try {
+        this.tasks = await apiFetch<Task[]>(url, {
+          headers: {
+            Authorization: `Bearer ${authStore.token}`,
+          },
+        })
+      } finally {
+        this.loading = false
+      }
     },
 
     async createTask(data: {
@@ -53,7 +52,7 @@ export const useTaskStore = defineStore('tasks', {
     }) {
       const authStore = useAuthStore()
 
-      const response = await fetch('http://localhost:8000/tasks', {
+      const newTask = await apiFetch<Task>('http://localhost:8000/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,9 +64,6 @@ export const useTaskStore = defineStore('tasks', {
         }),
       })
 
-      if (!response.ok) throw new Error('Failed to create task')
-
-      const newTask = await response.json()
       this.tasks.push(newTask)
       return newTask
     },
@@ -75,21 +71,15 @@ export const useTaskStore = defineStore('tasks', {
     async updateTaskStatus(taskId: number, status: string) {
       const authStore = useAuthStore()
 
-      const response = await fetch(
-        `http://localhost:8000/tasks/${taskId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authStore.token}`,
-          },
-          body: JSON.stringify({ status }),
-        }
-      )
+      const updated = await apiFetch<Task>(`http://localhost:8000/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authStore.token}`,
+        },
+        body: JSON.stringify({ status }),
+      })
 
-      if (!response.ok) throw new Error('Failed to update task')
-
-      const updated = await response.json()
       const index = this.tasks.findIndex(t => t.id === taskId)
       if (index !== -1) this.tasks[index] = updated
     },
@@ -97,17 +87,12 @@ export const useTaskStore = defineStore('tasks', {
     async deleteTask(taskId: number) {
       const authStore = useAuthStore()
 
-      const response = await fetch(
-        `http://localhost:8000/tasks/${taskId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${authStore.token}`,
-          },
-        }
-      )
-
-      if (!response.ok) throw new Error('Failed to delete task')
+      await apiFetch(`http://localhost:8000/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      })
 
       this.tasks = this.tasks.filter(t => t.id !== taskId)
     },

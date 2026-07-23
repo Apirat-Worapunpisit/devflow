@@ -32,35 +32,30 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(email: string, username: string, password: string) {
-      const response = await fetch('http://localhost:8000/auth/register', {
+      return apiFetch('http://localhost:8000/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username, password }),
       })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.detail)
-      }
-
-      return await response.json()
     },
 
     async login(email: string, password: string) {
-      const response = await fetch('http://localhost:8000/auth/login', {
+      const data = await apiFetch<{ access_token: string }>('http://localhost:8000/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username: email, password }),
       })
 
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.detail)
-      }
-
-      const data = await response.json()
       this.token = data.access_token
       localStorage.setItem('token', data.access_token)
+    },
+
+    async fetchUser() {
+      this.user = await apiFetch<User>('http://localhost:8000/auth/me', {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
     },
 
     logout() {

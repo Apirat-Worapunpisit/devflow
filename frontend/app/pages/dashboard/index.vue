@@ -7,9 +7,14 @@
         <h1 class="title">👋 สวัสดี, {{ authStore.user?.username || 'Developer' }}</h1>
         <p class="subtitle">ยินดีต้อนรับกลับมา</p>
       </div>
-      <button class="logout-btn" @click="authStore.logout()">
-        ออกจากระบบ
-      </button>
+      <div class="header-actions">
+        <NuxtLink to="/dashboard/settings" class="settings-btn">
+          ⚙️ Settings
+        </NuxtLink>
+        <button class="logout-btn" @click="authStore.logout()">
+          ออกจากระบบ
+        </button>
+      </div>
     </div>
 
     <!-- Stats -->
@@ -84,11 +89,16 @@ const doneTasks = computed(() => taskStore.tasks.filter(t => t.status === 'done'
 const recentProjects = computed(() => projectStore.projects.slice(0, 3))
 
 onMounted(async () => {
-  await projectStore.fetchProjects()
-  
-  // fetch tasks ของทุก project
-  for (const project of projectStore.projects) {
-    await taskStore.fetchTasks(project.id)
+  try {
+    await authStore.fetchUser()
+    await projectStore.fetchProjects()
+
+    // fetch tasks ของทุก project
+    for (const project of projectStore.projects) {
+      await taskStore.fetchTasks(project.id)
+    }
+  } catch {
+    // error dialog แสดงจาก apiFetch แล้ว
   }
 })
 </script>
@@ -115,6 +125,25 @@ onMounted(async () => {
 .subtitle {
   color: #6b7280;
   margin-top: 4px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-btn {
+  padding: 8px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  color: inherit;
+  text-decoration: none;
+}
+
+.settings-btn:hover {
+  background: #f9fafb;
 }
 
 .logout-btn {

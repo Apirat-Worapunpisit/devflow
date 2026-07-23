@@ -4,8 +4,14 @@ from app.schemas import UserCreate, UserResponse, Token
 from app.models import User
 from app.services import hash_password, verify_password, create_access_token
 from app.database import get_db
+from app.dependencies import get_current_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+@router.get("/me", response_model=UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
 
 
 @router.post("/register", response_model=UserResponse)
