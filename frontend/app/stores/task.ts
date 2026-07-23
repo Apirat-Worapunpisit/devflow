@@ -30,8 +30,8 @@ export const useTaskStore = defineStore('tasks', {
       this.loading = true
 
       const url = projectId
-        ? `http://localhost:8000/tasks?project_id=${projectId}`
-        : 'http://localhost:8000/tasks'
+        ? `/tasks?project_id=${projectId}`
+        : '/tasks'
 
       try {
         this.tasks = await apiFetch<Task[]>(url, {
@@ -52,7 +52,7 @@ export const useTaskStore = defineStore('tasks', {
     }) {
       const authStore = useAuthStore()
 
-      const newTask = await apiFetch<Task>('http://localhost:8000/tasks', {
+      const newTask = await apiFetch<Task>('/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ export const useTaskStore = defineStore('tasks', {
     async updateTaskStatus(taskId: number, status: string) {
       const authStore = useAuthStore()
 
-      const updated = await apiFetch<Task>(`http://localhost:8000/tasks/${taskId}`, {
+      const updated = await apiFetch<Task>(`/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export const useTaskStore = defineStore('tasks', {
     async deleteTask(taskId: number) {
       const authStore = useAuthStore()
 
-      await apiFetch(`http://localhost:8000/tasks/${taskId}`, {
+      await apiFetch(`/tasks/${taskId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${authStore.token}`,

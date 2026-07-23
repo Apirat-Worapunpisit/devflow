@@ -242,7 +242,7 @@ const handleAIBreakdown = async () => {
   try {
     const authStore = useAuthStore()
     const data = await apiFetch<{ tasks: any[] }>(
-      `http://localhost:8000/tasks/ai-breakdown?feature=${encodeURIComponent(aiFeature.value)}`,
+      `/tasks/ai-breakdown?feature=${encodeURIComponent(aiFeature.value)}`,
       {
         method: 'POST',
         headers: {

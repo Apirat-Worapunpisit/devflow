@@ -1,4 +1,7 @@
-export async function apiFetch<T = any>(url: string, options: RequestInit = {}): Promise<T> {
+export async function apiFetch<T = any>(path: string, options: RequestInit = {}): Promise<T> {
+  const apiUrl = useRuntimeConfig().public.apiUrl as string
+  const url = path.startsWith('http') ? path : `${apiUrl}${path}`
+
   let response: Response
 
   try {

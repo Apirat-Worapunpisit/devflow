@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async register(email: string, username: string, password: string) {
-      return apiFetch('http://localhost:8000/auth/register', {
+      return apiFetch('/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username, password }),
@@ -40,7 +40,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async login(email: string, password: string) {
-      const data = await apiFetch<{ access_token: string }>('http://localhost:8000/auth/login', {
+      const data = await apiFetch<{ access_token: string }>('/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, username: email, password }),
@@ -51,7 +51,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async fetchUser() {
-      this.user = await apiFetch<User>('http://localhost:8000/auth/me', {
+      this.user = await apiFetch<User>('/auth/me', {
         headers: {
           Authorization: `Bearer ${this.token}`,
         },

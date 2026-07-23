@@ -27,7 +27,7 @@ export const useProjectStore = defineStore('projects', {
       this.loading = true
 
       try {
-        this.projects = await apiFetch<Project[]>('http://localhost:8000/projects', {
+        this.projects = await apiFetch<Project[]>('/projects', {
           headers: {
             Authorization: `Bearer ${authStore.token}`,
           },
@@ -40,7 +40,7 @@ export const useProjectStore = defineStore('projects', {
     async createProject(title: string, description: string) {
       const authStore = useAuthStore()
 
-      const newProject = await apiFetch<Project>('http://localhost:8000/projects', {
+      const newProject = await apiFetch<Project>('/projects', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const useProjectStore = defineStore('projects', {
     async deleteProject(id: number) {
       const authStore = useAuthStore()
 
-      await apiFetch(`http://localhost:8000/projects/${id}`, {
+      await apiFetch(`/projects/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${authStore.token}`,
