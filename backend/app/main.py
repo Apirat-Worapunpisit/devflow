@@ -17,8 +17,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
-        "https://devflow-xxx.vercel.app",  # ← เปลี่ยนเป็น URL จริงของ Vercel
-        "https://*.vercel.app",            # ← ครอบคลุมทุก Vercel URL
+        "https://devflow-jy7z7hm21-poog-lord.vercel.app",  # ← เปลี่ยนเป็น URL จริงของ Vercel
+        "https://devflow-vert.vercel.app",            # ← ครอบคลุมทุก Vercel URL
     ], # อนุญาตเฉพาะ localhost:3000 (Nuxt) เท่านั้น
     allow_credentials=True, # อนุญาตให้ส่ง cookie/token มาด้วยได้
     allow_methods=["*"], # อนุญาตทุก HTTP method (GET, POST, PUT, DELETE)
